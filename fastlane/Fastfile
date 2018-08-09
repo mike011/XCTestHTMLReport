@@ -1,0 +1,62 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+platform :ios do
+  desc "Test and generate the XCTestHTMLReport for the sample app."
+  lane :test do
+    sh "rm -rf ./test_output/"
+    xcodebuild( scheme: "XCTestHTMLReportSampleApp",
+             workspace: "XCTestHTMLReport.xcworkspace",
+           destination: "platform=iOS Simulator,name=iPhone 6",
+                xcargs: "build-for-testing GCC_WARN_INHIBIT_ALL_WARNINGS=YES",
+         configuration: "Debug",
+         code_coverage: true,
+      output_directory: "./fastlane/test_output/"
+    )
+    begin
+      xcodebuild( scheme: "XCTestHTMLReportSampleApp",
+             workspace: "XCTestHTMLReport.xcworkspace",
+           destination: "platform=iOS Simulator,name=iPhone 6",
+                xcargs: "test-without-building GCC_WARN_INHIBIT_ALL_WARNINGS=YES -resultBundlePath ./fastlane/test_output/",
+         code_coverage: true,
+      output_directory: "./fastlane/test_output/"
+      )
+    ensure
+      generateXCTestHTMLReport
+    end
+  end
+
+  lane :generateXCTestHTMLReport do
+    puts "Generate the XCTestHTMLReport"
+    x = 1
+    if which('xchtmlreport').nil?
+      puts "Installing XCTestHTMLReport"
+      sh "brew install https://raw.githubusercontent.com/TitouanVanBelle/XCTestHTMLReport/develop/xchtmlreport.rb"
+    end
+    sh "xchtmlreport -r ./test_output/"
+  end
+
+  # Cross-platform way of finding an executable in the $PATH.
+  #
+  #   which('ruby') #=> /usr/bin/ruby
+  def which(cmd)
+    exts = ENV['PATHEXT'] ? ENV['PATHEXT'].split(';') : ['']
+    ENV['PATH'].split(File::PATH_SEPARATOR).each do |path|
+      exts.each { |ext|
+        exe = File.join(path, "#{cmd}#{ext}")
+        return exe if File.executable?(exe) && !File.directory?(exe)
+      }
+      end
+    return nil
+  end
+end

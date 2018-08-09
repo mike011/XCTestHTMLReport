@@ -18,48 +18,12 @@ Xcode-like HTML report for Unit and UI Tests
 - Displays information about the target device
 - Displays activity logs
 
-## Installation
-
-### Homebrew
-
-Install via [Homebrew](https://brew.sh/).
-
-```bash
-# Install latest stable version
-$ brew install https://raw.githubusercontent.com/TitouanVanBelle/XCTestHTMLReport/develop/xchtmlreport.rb
-
-# Install latest master branch
-$ brew install --HEAD https://raw.githubusercontent.com/TitouanVanBelle/XCTestHTMLReport/develop/xchtmlreport.rb
-```
-
-### Alternate
-
-Simply execute the following command to download the latest version of XCTestHTMLReport
-
-``` bash
-$ bash <(curl -s https://raw.githubusercontent.com/TitouanVanBelle/XCTestHTMLReport/master/install.sh)
-```
-
-You can also specify a branch or tag
-
-``` bash
-$ bash <(curl -s https://raw.githubusercontent.com/TitouanVanBelle/XCTestHTMLReport/master/install.sh) '1.0.0'
-```
-
 ## Usage
 
-Run your UI tests using `xcodebuild` without forgetting to specify the `resultBundlePath`
+Install XCTestHTMLReport and run your UI tests using fastlane
 
 ``` bash
-$ xcodebuild test -workspace XCTestHTMLReport.xcworkspace -scheme XCTestHTMLReportSampleApp -destination 'platform=iOS Simulator,name=iPhone 7,OS=11.0' -resultBundlePath TestResults
-```
-
-Then use the previously downloaded xchtmlreport tool to create the HTML report
-
-``` bash
-$ xchtmlreport -r TestResults
-
-Report successfully created at TestResults/index.html
+$ fastlane test
 ```
 
 ### Multiple Result Bundle Path
@@ -73,6 +37,11 @@ Report successfully created at TestResults1/index.html
 ```
 
 This will create only one HTML Report in the path you passed with the -r option
+
+
+## Results
+
+Can be found here at ./fastlane/test_output/index.html
 
 ## Contribution
 

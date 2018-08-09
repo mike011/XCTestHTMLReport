@@ -31,3 +31,7 @@ xchtmlreport.swiftmodule/
 *.ipa
 *.dSYM.zip
 *.dSYM
+
+## Fastlane
+fastlane/test_output
+fastlane/report.xml
